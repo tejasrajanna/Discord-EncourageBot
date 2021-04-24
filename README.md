@@ -1,6 +1,6 @@
 # Discord-EncourageBot
-Use Uptime Robot to deploy in cloud
-Use Zenquotes API to fetch quotes
+## Use Uptime Robot to deploy in cloud
+## Use Zenquotes API to fetch quotes
 $hello prompts the bot to reply with Hello!
 $inspire returns an inspiring quote
 $new to add user defined encouragements
