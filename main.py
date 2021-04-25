@@ -23,8 +23,8 @@ starter_encouragements = [
     "You are a great person!"
 ]
 
-if "responding" not in db.keys():  # switch for encouraging messages
-    db["responding"] = True
+'''if "responding" not in db.keys():  # switch for encouraging messages
+    db["responding"] = True'''
 
 # helper function to return quote from API
 
@@ -103,28 +103,35 @@ async def on_message(message):
     # Delete encouraging message from db
     if msg.startswith("$del"):
         encouragements = []  # returns empty list if encour. not in db
-        if "encouragements" in db.keys():
+        try:
             # space is optional because we are converting to int
             index = int(msg.split("$del", 1)[1])
             delete_encouragements(index)
-            encouragements = db["encouragements"]
+            #encouragements = db["encouragements"]
+        except:
+            await message.channel.send("db server down")
+
         await message.channel.send(encouragements)
 
     if msg.startswith("$list"):  # to show all encour. messages
         encouragements = []  # if list is empty
-        if "encouragements" in db.keys():
-            encouragements = db["encouragements"]
-        await message.channel.send(encouragements)
-
+        coll = mydb.encouragements
+        temp = list(coll.find())
+        messages = []
+        for i in temp:
+            messages.append(i['message'])
+        await message.channel.send(random.choice(messages))
     if msg.startswith('$responding'):  # switch to respond to sad words
         value = msg.split("$responding ", 1)[1]
-        if value.lower() == "true":
-            db["responding"] = True
-            await message.channel.send("Responding is on")
-        else:
-            db["responding"] = False
-            await message.channel.send("Responding is off")
+        try:
+            myclient.discordbot()
+            await message.channel.send("responding on")
+        except:
+            await message.channel.send("responding off")
+
+    else:
+        await message.channel.send("wrong message child")
 
 keep_alive()  # web server
-my_secret = os.environ['TOKEN']
+my_secret = os.getenv('mkey')
 client.run(my_secret)
