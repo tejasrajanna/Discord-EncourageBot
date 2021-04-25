@@ -89,8 +89,8 @@ async def on_message(message):
         messages.append(i['message'])
 
         # responds with encouragement if any sad word is detected
-        if any(word in msg for word in sad_words):
-            await message.channel.send(random.choice(starter_encouragements))
+    if any(word in msg for word in sad_words):
+        await message.channel.send(random.choice(starter_encouragements))
 
     # add encouraging message to db
     if msg.startswith("$new"):
@@ -107,11 +107,10 @@ async def on_message(message):
             # space is optional because we are converting to int
             index = int(msg.split("$del", 1)[1])
             delete_encouragements(index)
+            await message.channel.send("deleted encourage message!!")
             #encouragements = db["encouragements"]
         except:
             await message.channel.send("db server down")
-
-        await message.channel.send(encouragements)
 
     if msg.startswith("$list"):  # to show all encour. messages
         encouragements = []  # if list is empty
@@ -120,7 +119,7 @@ async def on_message(message):
         messages = []
         for i in temp:
             messages.append(i['message'])
-        await message.channel.send(random.choice(messages))
+        await message.channel.send(messages)
     if msg.startswith('$responding'):  # switch to respond to sad words
         value = msg.split("$responding ", 1)[1]
         try:
@@ -129,8 +128,8 @@ async def on_message(message):
         except:
             await message.channel.send("responding off")
 
-    else:
-        await message.channel.send("wrong message child")
+    '''else:
+        message.channel.send("wrong message child")'''
 
 keep_alive()  # web server
 my_secret = os.getenv('mkey')
